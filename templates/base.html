@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broken Soul Heal</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         STAR / GALAXY BACKGROUND LAYERS
+         These must be placed at the top of <body> before content
+    ========================================================== -->
+
+    <!-- Main Starry Night Artwork Background -->
+    <div class="site-art"></div>
+
+    <!-- Parallax Galaxy Mist Layers -->
+    <div class="site-layer--galaxy-a"></div>
+    <div class="site-layer--galaxy-b"></div>
+    <div class="site-layer--galaxy-c"></div>
+
+    <!-- Van Gogh Swirling Brush Layer -->
+    <div class="site-swirl"></div>
+
+    <!-- Star Field Twinkling Layer -->
+    <div class="starry-field"></div>
+
+    <!-- Shooting Stars -->
+    <div class="shooting-stars">
+        <div class="streak s1"></div>
+        <div class="streak s2"></div>
+        <div class="streak s3"></div>
+        <div class="streak s4"></div>
+        <div class="streak s5"></div>
+    </div>
+
+    <!-- ========================================================= -->
+
+    <header>
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i> BROKEN.soul
+        </div>
+
+        {% if session.student_id %}
+        <nav>
+            <a href="{{ url_for('feed') }}">Feed</a>
+            <a href="{{ url_for('profile') }}">Profile</a>
+            <a href="{{ url_for('logout') }}">Logout ({{ session.student_id }})</a>
+        </nav>
+        {% endif %}
+    </header>
+
+    <div class="container">
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages() %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- JS (Optional) -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
