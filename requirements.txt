@@ -1,4 +1,6 @@
 Flask
+gunicorn
 Werkzeug
 Bcrypt
+
 
