@@ -1,0 +1,578 @@
+/* =========================================================================
+   style.css — Starry Night UI
+   - Shooting stars animation
+   - Parallax galaxy layers
+   - Star glow borders
+   - Swirling Van Gogh brush-stroke animations
+   - Animated gradient buttons
+   - Glassmorphism cards (transparent)
+   - Uses Poppins font from Google
+   ========================================================================= */
+
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+:root{
+    --night-900: #081224;    /* extra deep */
+    --night-800: #0d2236;
+    --night-700: #163049;
+    --moon: whitesmoke;         /* soft moonlight */
+    --star: #ffd54a;         /* star yellow */
+    --accent: #a7d3ff;       /* subtle sky accent */
+    --glass: rgba(255,255,255,0.08);
+    --glass-strong: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.15);
+}
+
+/* ------------- Base ------------- */
+* { box-sizing: border-box; margin:0; padding:0; }
+html,body { height:100%; }
+body {
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+    background: var(--night-900);
+    color: var(--moon);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    position:relative;
+}
+
+/* =========================
+   Decorative layers (parallax + swirl + stars)
+   ========================= */
+
+/* Main art layer (your starry image or video can sit below content) */
+.site-art {
+    position: fixed;
+    inset: 0;
+    background-image: url("https://cdn.dribbble.com/userupload/32248593/file/original-48717ffe8a887a7633a63add13f7534c.jpg?resize=1600x1200");
+    background-size: cover;
+    background-position: center;
+    opacity: 0.95;
+    z-index: -5;
+    transform-origin: center;
+    filter: saturate(1.05) contrast(1.03) brightness(0.95);
+    will-change: transform;
+    /* subtle slow drift for parallax illusion */
+    animation: art-drift 40s linear infinite;
+}
+
+/* Parallax galaxy layers (semi-transparent, move at different speeds) */
+.site-layer--galaxy-a,
+.site-layer--galaxy-b,
+.site-layer--galaxy-c {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -4;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+/* soft blue nebula */
+.site-layer--galaxy-a {
+    background: radial-gradient(600px 300px at 10% 20%, rgba(58,118,180,0.18), transparent 20%),
+                radial-gradient(500px 260px at 80% 80%, rgba(110,60,150,0.12), transparent 18%);
+    filter: blur(12px) saturate(120%);
+    transform: translateZ(0);
+    animation: layer-move-slow 28s linear infinite;
+}
+
+/* mid-depth star mist */
+.site-layer--galaxy-b {
+    background: radial-gradient(500px 260px at 40% 10%, rgba(255,215,90,0.06), transparent 10%),
+                radial-gradient(350px 220px at 75% 30%, rgba(90,140,220,0.06), transparent 12%);
+    filter: blur(10px) saturate(120%);
+    animation: layer-move-medium 20s linear infinite;
+}
+
+/* foreground sparkle */
+.site-layer--galaxy-c {
+    background: radial-gradient(120px 40px at 20% 30%, rgba(255,255,255,0.06), transparent 40%),
+                radial-gradient(80px 30px at 60% 70%, rgba(255,230,150,0.04), transparent 30%);
+    filter: blur(6px);
+    animation: layer-move-fast 12s linear infinite;
+}
+
+/* Van Gogh swirl (conic gradient + rotation + blur) */
+.site-swirl {
+    position: fixed;
+    inset: -20%;
+    z-index: -3;
+    pointer-events: none;
+    background: conic-gradient(from 180deg at 50% 50%,
+        rgba(255,200,80,0.035),
+        rgba(160,200,255,0.02),
+        rgba(40,80,140,0.02),
+        rgba(255,160,60,0.02),
+        rgba(255,200,80,0.035)
+    );
+    opacity: 0.9;
+    transform-origin: center;
+    filter: blur(40px) contrast(1.05) saturate(1.2);
+    animation: swirl-rotate 60s linear infinite;
+}
+
+/* star field — many small sparks (CSS-only) */
+.starry-field {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1px 1px at 10% 8%, rgba(255,255,255,0.95), transparent 60%),
+      radial-gradient(1px 1px at 22% 22%, rgba(255,255,255,0.9), transparent 60%),
+      radial-gradient(1px 1px at 32% 70%, rgba(255,255,255,0.85), transparent 60%),
+      radial-gradient(1px 1px at 45% 40%, rgba(255,255,255,0.9), transparent 60%),
+      radial-gradient(1px 1px at 58% 12%, rgba(255,255,255,0.85), transparent 60%),
+      radial-gradient(1px 1px at 68% 65%, rgba(255,255,255,0.8), transparent 60%),
+      radial-gradient(1px 1px at 82% 30%, rgba(255,255,255,0.95), transparent 60%),
+      radial-gradient(1px 1px at 92% 80%, rgba(255,255,255,0.85), transparent 60%);
+    opacity: 0.95;
+    mix-blend-mode: screen;
+    animation: star-twinkle 6s linear infinite;
+}
+
+/* Shooting stars container (creates occasional streaks) */
+.shooting-stars {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* individual star streaks using pseudo elements (multiple) */
+.shooting-stars::before,
+.shooting-stars::after {
+    content: "";
+    position: absolute;
+    left: -10%;
+    top: 10%;
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(120deg,
+        rgba(255,255,255,0.0) 0%,
+        rgba(255,255,255,0.28) 45%,
+        rgba(255,255,255,0.0) 70%);
+    transform: rotate(-20deg);
+    filter: blur(2px) drop-shadow(0 0 8px rgba(255,220,120,0.12));
+    opacity: 0;
+    animation: shooting-1 7s linear infinite;
+}
+
+/* more subtle randomized streaks via animated multiple pseudo layers */
+.shooting-stars .streak {
+    position: absolute;
+    width: 220px;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.95), rgba(255,255,255,0));
+    transform: rotate(-25deg) translateX(-300px);
+    filter: blur(1px) drop-shadow(0 0 6px rgba(255,230,140,0.2));
+    opacity: 0;
+    animation: streak-fly 4s linear infinite;
+    will-change: transform, opacity;
+}
+
+/* create a handful of streaks with different delays/positions */
+.shooting-stars .streak.s1 { top: 12%; left: 90%; animation-delay: 0.2s; animation-duration: 3.8s; opacity: 0.95; }
+.shooting-stars .streak.s2 { top: 40%; left: 95%; animation-delay: 1.6s; animation-duration: 5.2s; transform: rotate(-18deg); }
+.shooting-stars .streak.s3 { top: 25%; left: 80%; animation-delay: 2.8s; animation-duration: 4.4s; transform: rotate(-28deg); }
+.shooting-stars .streak.s4 { top: 60%; left: 85%; animation-delay: 3.4s; animation-duration: 6.0s; transform: rotate(-22deg); }
+.shooting-stars .streak.s5 { top: 75%; left: 92%; animation-delay: 5.1s; animation-duration: 4.8s; transform: rotate(-30deg); }
+
+/* =========================
+   Keyframes for decorative elements
+   ========================= */
+
+@keyframes art-drift {
+    0%{ transform: translate3d(0,0,0) scale(1); }
+    50%{ transform: translate3d(-2%, 1%, 0) scale(1.01); }
+    100%{ transform: translate3d(0,0,0) scale(1); }
+}
+
+@keyframes layer-move-slow {
+    0% { transform: translate3d(0,0,0); }
+    50% { transform: translate3d(-1.8%,0.6%,0); }
+    100% { transform: translate3d(0,0,0); }
+}
+@keyframes layer-move-medium {
+    0% { transform: translate3d(0,0,0); }
+    50% { transform: translate3d(-2.6%,0.8%,0); }
+    100% { transform: translate3d(0,0,0); }
+}
+@keyframes layer-move-fast {
+    0% { transform: translate3d(0,0,0); }
+    50% { transform: translate3d(-4%,1.6%,0); }
+    100% { transform: translate3d(0,0,0); }
+}
+
+@keyframes swirl-rotate {
+    0%{ transform: rotate(0deg); }
+    100%{ transform: rotate(360deg); }
+}
+
+@keyframes star-twinkle {
+    0% { opacity: 0.95; filter: brightness(1); }
+    50% { opacity: 0.6; filter: brightness(0.85); }
+    100% { opacity: 0.95; filter: brightness(1); }
+}
+
+@keyframes shooting-1 {
+    0% { opacity: 0; transform: translateX(-15%) rotate(-20deg) scaleX(0.6); }
+    6% { opacity: 1; transform: translateX(5%) rotate(-20deg) scaleX(1); }
+    18% { opacity: 0.8; transform: translateX(45%) rotate(-20deg) scaleX(0.9); }
+    26% { opacity: 0; transform: translateX(65%) rotate(-20deg) scaleX(0.6); }
+    100% { opacity: 0; }
+}
+
+@keyframes streak-fly {
+    0% { transform: translateX(-300px) rotate(-25deg) scaleX(0.4); opacity: 0; }
+    5% { opacity: 1; transform: translateX(-120px) rotate(-25deg) scaleX(1); }
+    50% { opacity: 0.8; transform: translateX(420px) rotate(-25deg) scaleX(1); }
+    90% { opacity: 0; transform: translateX(800px) rotate(-25deg) scaleX(0.4); }
+    100% { opacity: 0; }
+}
+
+/* =========================
+   Layout & header
+   ========================= */
+
+header{
+    background: linear-gradient(180deg, rgba(3,8,18,0.7), rgba(3,8,18,0.6));
+    color: var(--moon);
+    padding: 2.6rem 1rem;
+    text-align:center;
+    border-bottom: 3px solid rgba(255,213,74,0.12);
+    backdrop-filter: blur(6px) saturate(120%);
+    position:relative;
+    z-index: 10;
+}
+
+header .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 2.6rem;
+    color: whitesmoke; /* text color red */
+}
+
+header .logo i {
+    color: red; /* icon color red */
+    font-size: 2.8rem;
+    transform: translateY(1px);
+}
+
+
+/* nav */
+header nav {
+    margin-top: 1rem;
+}
+header nav a {
+    color: rgba(255,248,214,0.95);
+    margin: 0 1rem;
+    text-decoration:none;
+    font-weight:600;
+    font-size:0.98rem;
+    transition: color .22s ease, transform .22s ease;
+}
+header nav a:hover { color:var(--star); transform: translateY(-2px); }
+
+/* container */
+.container{
+    max-width: 980px;
+    margin: 2.2rem auto;
+    padding: 1rem;
+    position:relative;
+    z-index: 5; /* above decorative layers */
+}
+
+/* =========================
+   Glass Card & Profile / Feed
+   ========================= */
+
+.card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 36px rgba(2,8,20,0.65), inset 0 1px 0 rgba(255,255,255,0.02);
+    padding: 2.2rem;
+    margin-bottom:2rem;
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    transition: transform .28s cubic-bezier(.2,.9,.2,1), box-shadow .28s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* star-glow border (accent line + soft outer glow) */
+.card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 16px;
+    box-shadow: 0 0 28px rgba(255,213,74,0.08), 0 0 8px rgba(160,220,255,0.02);
+    mix-blend-mode: screen;
+}
+
+/* subtle hover lift */
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 26px 60px rgba(2,8,20,0.75);
+}
+
+/* stronger star-glow accent at top border */
+.card .card-accent {
+    position:absolute;
+    left:0; right:0; top:0;
+    height:6px;
+    background: linear-gradient(90deg, rgba(255,213,74,0.0) 0%, rgba(255,213,74,0.26) 20%, rgba(255,213,74,0.6) 50%, rgba(255,213,74,0.26) 80%, rgba(255,213,74,0) 100%);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    pointer-events:none;
+    mix-blend-mode: screen;
+}
+
+/* profile image */
+.profile-img {
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    object-fit:cover;
+    border: 6px solid rgba(255,213,74,0.95);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6), 0 0 18px rgba(255,213,74,0.08);
+    display:block;
+    margin-bottom:1.2rem;
+}
+
+/* posts */
+.post {
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+    padding-bottom:1.6rem;
+    margin-bottom:1.6rem;
+}
+
+/* post header small avatar */
+.post-header img {
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    border: 3px solid rgba(255,213,74,0.95);
+    object-fit:cover;
+}
+
+/* post bottom actions */
+.post-actions { display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
+
+/* learn more box */
+.learn-more{
+    background: linear-gradient(180deg, rgba(255,248,214,0.03), rgba(255,248,214,0.02));
+    border-left: 5px solid rgba(255,213,74,0.9);
+    padding:1rem;
+    border-radius:8px;
+    color:var(--moon);
+    backdrop-filter: blur(8px);
+}
+
+/* =========================
+   Forms, inputs, selects, options
+   ========================= */
+
+form label { display:block; margin-top:0.6rem; color: rgba(255,248,214,0.95); font-weight:600; font-size:0.95rem; }
+form input, form textarea, form select {
+    width:100%;
+    padding:0.95rem 1rem;
+    margin-top:0.6rem;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(10,20,34,0.28), rgba(12,28,48,0.18));
+    color: var(--moon);
+    font-size:1rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* more transparent inputs on focus with star accent */
+form input:focus, form textarea:focus, form select:focus {
+    outline:none;
+    border-color: rgba(255,213,74,0.95);
+    box-shadow: 0 6px 28px rgba(255,213,74,0.06);
+    transform: translateY(-1px);
+}
+
+/* placeholders */
+form input::placeholder, form textarea::placeholder {
+    color: rgba(232,220,176,0.6);
+}
+
+/* custom-looking select (note: native options limited by browser) */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.8) 50%),
+                      linear-gradient(135deg, rgba(255,255,255,0.8) 50%, transparent 50%),
+                      linear-gradient( to right, rgba(255,255,255,0.02), rgba(255,255,255,0.02) );
+    background-position: calc(100% - 18px) calc(1.35em), calc(100% - 13px) calc(1.35em), 100% 100%;
+    background-size: 8px 8px, 8px 8px, 1px 1px;
+    background-repeat: no-repeat;
+    padding-right: 2.4rem;
+    cursor: pointer;
+}
+
+/* gradient for select element itself (closed state) */
+form select {
+    background: linear-gradient(180deg, rgba(10,22,38,0.30), rgba(12,30,52,0.24));
+    border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* attempt to style options (some browsers will still use native rendering) */
+form select option {
+    background: linear-gradient(180deg, rgba(8,20,38,0.95), rgba(12,30,60,0.95));
+    color: var(--moon);
+    padding:8px 10px;
+}
+
+/* =========================
+   Animated Gradient Buttons
+   ========================= */
+
+/* Base button */
+.btn {
+    display: inline-block;
+    padding: 0.95rem 1.2rem;
+    border-radius: 12px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    border: none;
+    color: var(--night-900, #000);
+    transition: transform 0.16s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Primary button */
+.btn-primary {
+    background-color: #29b305;
+    color: #ffffff;
+    padding: 1.1rem 2.5rem;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.16s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #ffffff;
+    color: #29b305;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Secondary button */
+/* Secondary button */
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid #ffd54a;
+    color: #29b305;
+    padding: 0.8rem 2.5rem; /* reduced height */
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.16s ease, box-shadow 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #ffffff;
+    color: #29b305;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+.btn-danger {
+    background-color: #e74c3c; /* Strong red */
+    color: #ffffff;            /* White text */
+    border: none;              /* No border */
+    padding: 10px 20px;        /* Vertical and horizontal padding */
+    font-size: 16px;           /* Medium font size */
+    font-weight: 600;          /* Slightly bold */
+    border-radius: 6px;        /* Rounded corners */
+    cursor: pointer;           /* Pointer on hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.btn-danger:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.btn-danger:active {
+    background-color: #a93226; /* Even darker when clicked */
+    transform: translateY(0); /* Reset position */
+}
+
+.btn-danger:disabled {
+    background-color: #e0e0e0; /* Gray for disabled */
+    color: #a0a0a0;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
+/* ================================
+   PROFILE + POSTS
+   ================================ */
+
+
+@keyframes btn-gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =========================
+   Star glow focus/outline (for cards, inputs)
+   ========================= */
+:focus { outline: none; }
+.card:focus-within { box-shadow: 0 28px 70px rgba(3,8,18,0.85), 0 0 40px rgba(255,213,74,0.06); border-color: rgba(255,213,74,0.1); }
+
+/* link styles */
+a { color: var(--star); text-decoration: none; font-weight:600; transition: color .18s; }
+a:hover { color: #fff7d1; text-decoration: underline; }
+
+/* small util */
+.text-center { text-align:center; }
+.small { font-size:0.95rem; color: rgba(255,248,214,0.85); }
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width:800px){
+    header .logo { font-size:1.9rem; }
+    .container { padding: .8rem; margin-top:1rem; }
+    .profile-img { width:120px; height:120px; }
+    .card { padding:1.6rem; border-radius:12px; }
+    .btn { width:100%; display:block; text-align:center; }
+}
+
+/* =========================
+   Accessibility: reduce motion
+   ========================= */
+@media (prefers-reduced-motion: reduce) {
+    .site-art, .site-layer--galaxy-a, .site-layer--galaxy-b, .site-layer--galaxy-c,
+    .site-swirl, .starry-field, .shooting-stars, .shooting-stars::before, .shooting-stars::after,
+    .shooting-stars .streak { animation: none !important; transition: none !important; }
+}
