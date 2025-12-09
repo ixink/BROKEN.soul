@@ -66,5 +66,15 @@
         {% endif %}
     </div>
 </div>
+<script>
+const btn = document.querySelector('.btn-secondary');
+const learnMore = document.querySelector('.learn-more');
+
+btn.addEventListener('click', () => {
+    learnMore.classList.toggle('show');
+});
+</script>
+
 {% endfor %}
+
 {% endblock %}
