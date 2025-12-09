@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card text-center">
+    <h2>Create Your Account</h2>
+    <p class="small mb-2">Join a safe community where you can share and support each other.</p>
+    <form method="POST">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="text" name="dept" placeholder="Department" required>
+        <input type="text" name="student_id" placeholder="Student ID" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit" class="btn-primary mt-1">Sign Up</button>
+    </form>
+    <p class="mt-1 small">Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
+</div>
+{% endblock %}
