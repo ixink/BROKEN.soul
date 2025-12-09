@@ -1,0 +1,25 @@
+{
+    "users": {
+        "0112230598": {
+            "name": "Rayhan Ahmed",
+            "dept": "CSE",
+            "phone": "01575467289",
+            "email": "rayhan.fea@gmail.com",
+            "password": "cse@1234",
+            "role": "Healer",
+            "profile_pic": "/static/uploads/0112230598.jpeg",
+            "long_description": ""
+        },
+        "0152420028": {
+            "name": "Nasrullah Farhan Parag",
+            "dept": "CSE",
+            "phone": "01341650170",
+            "email": "nasrullahfarhanparag@gmail.com",
+            "password": "dsc@1234",
+            "role": "Healer",
+            "profile_pic": "/static/default_pic.jpg",
+            "long_description": ""
+        }
+    },
+    "posts": []
+}
