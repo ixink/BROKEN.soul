@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card login-card text-center">
+
+    <h2 class="title">Welcome Back</h2>
+    <p class="small mb-2">We're glad you're here. Log in to continue your healing journey.</p>
+
+    <form method="POST" class="login-form">
+
+        <input 
+            type="text"
+            name="student_id"
+            placeholder="Student ID"
+            required
+            class="input-field"
+        >
+
+        <input 
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+            class="input-field"
+        >
+
+        <button type="submit" class="btn-primary mt-1 glow-btn">
+            Log In
+        </button>
+    </form>
+
+    <p class="mt-1 small fade-link">
+        New here?
+        <a href="{{ url_for('signup') }}">Create an account</a>
+    </p>
+
+</div>
+
+{% endblock %}
