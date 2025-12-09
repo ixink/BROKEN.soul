@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card text-center">
+    <h2>Reach Out to {{ author.name }}</h2>
+    <img src="{{ author.profile_pic or '/static/default_pic.jpg' }}" alt="Profile" class="profile-img mt-1">
+    <p class="mt-1">{{ author.name }} ({{ author.student_id }})</p>
+    
+    <p class="mb-2">A kind message can make a big difference.<br>Be gentle and supportive.</p>
+
+    <div class="learn-more" style="display:block; max-width:400px; margin:1.5rem auto; text-align:left;">
+        <p><strong>Email:</strong> <a href="mailto:{{ author.email }}">{{ author.email }}</a></p>
+        <p><strong>Phone:</strong> {{ author.phone }}</p>
+    </div>
+
+    <a href="{{ url_for('feed') }}" class="btn-primary">← Back to Feed</a>
+    <br></br>
+    
+    <p class="small mt-1">Private messaging is coming soon.<br>For now, please reach out respectfully via email or phone.</p>
+</div>
+{% endblock %}
