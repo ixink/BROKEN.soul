@@ -138,4 +138,5 @@ def message(author_id):
     return render_template('message.html', author=author)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+
+    app.run(debug=False)
