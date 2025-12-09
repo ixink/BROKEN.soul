@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center mb-2">
+    <h2>A Safe Space to Share & Support</h2>
+</div>
+
+{% if current_user.role == 'Broken' %}
+<div class="card">
+    <h3>Need Someone to Talk To?</h3>
+    <p class="small mb-2">Sharing can be the first step toward feeling better.</p>
+    <form method="POST" action="{{ url_for('create_post') }}">
+        <input type="text" name="title" placeholder="How are you feeling?" required>
+        <textarea name="short_desc" rows="4" placeholder="Share a little more..." required></textarea>
+        <input type="text" name="free_time" placeholder="When are you usually free? (optional)">
+        <input type="text" name="place" placeholder="Preferred meeting spot? (optional)">
+        <input type="text" name="favorite" placeholder="Something you enjoy? (optional)">
+        <button type="submit" class="btn-primary">Share My Story</button>
+    </form>
+</div>
+{% else %}
+<div class="card text-center">
+    <h3>Thank You for Being a Healer</h3>
+    <p>Your presence here helps others feel less alone.</p>
+</div>
+{% endif %}
+
+{% for post in posts %}
+{% set author = users[post.author_id] %}
+<div class="card post">
+    <div class="post-header">
+        <img src="{{ author.profile_pic or '/static/default_pic.jpg' }}" alt="Profile">
+        <div>
+            <strong>{{ author.name }}</strong><br>
+            <span class="small">{{ post.author_id }} • {{ author.role }}</span>
+        </div>
+    </div>
+    <h4>{{ post.title }}</h4>
+    <p>{{ post.short_desc }}</p>
+    {% if post.free_time or post.place or post.favorite %}
+    <div class="small">
+        {% if post.free_time %}Free: {{ post.free_time }}<br>{% endif %}
+        {% if post.place %}Place: {{ post.place }}<br>{% endif %}
+        {% if post.favorite %}Enjoys: {{ post.favorite }}{% endif %}
+    </div>
+    {% endif %}
+
+    <div class="post-actions">
+        <a href="{{ url_for('message', author_id=post.author_id) }}" class="btn-primary">
+            <i class="fas fa-hands-helping"></i> Offer Support
+        </a>
+        <button onclick="toggleLearnMore('{{ post.author_id }}')" class="btn-secondary">Learn More</button>
+        {% if post.author_id == session.student_id %}
+        <form id="delete-form-{{ loop.index0 }}" method="POST" action="{{ url_for('delete_post', post_index=loop.index0) }}" style="display:inline;">
+            <button type="button" onclick="confirmDelete({{ loop.index0 }})" class="btn-danger">
+                <i class="fas fa-trash-alt"></i> Remove
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <div id="more-{{ post.author_id }}" class="learn-more hidden">
+        {% if author.long_description %}
+            {{ author.long_description }}
+        {% else %}
+            <em>No additional details shared.</em>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
