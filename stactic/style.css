@@ -369,14 +369,21 @@ header nav a:hover { color:var(--star); transform: translateY(-2px); }
 .post-actions { display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap; }
 
 /* learn more box */
-.learn-more{
-    background: linear-gradient(180deg, rgba(255,248,214,0.03), rgba(255,248,214,0.02));
-    border-left: 5px solid rgba(255,213,74,0.9);
-    padding:1rem;
-    border-radius:8px;
-    color:var(--moon);
+.learn-more {
+    display: none; /* hidden by default */
+    background: linear-gradient(180deg, rgba(255, 248, 214, 0.03), rgba(255, 248, 214, 0.02));
+    border-left: 5px solid rgba(255, 213, 74, 0.9);
+    padding: 1rem;
+    border-radius: 8px;
+    color: var(--moon);
     backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
 }
+
+.learn-more.show {
+    display: block; /* show when toggled */
+}
+
 
 /* =========================
    Forms, inputs, selects, options
@@ -576,3 +583,4 @@ a:hover { color: #fff7d1; text-decoration: underline; }
     .site-swirl, .starry-field, .shooting-stars, .shooting-stars::before, .shooting-stars::after,
     .shooting-stars .streak { animation: none !important; transition: none !important; }
 }
+
